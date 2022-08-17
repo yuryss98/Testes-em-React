@@ -68,4 +68,16 @@ describe('Testando o componente App', () => {
     expect(notFoundTitle).toBeInTheDocument();
     expect(notFoundImage).toBeInTheDocument();
   });
+
+  it('tesntado input de favoritar', () => {
+    const { history } = renderWithRouter(<App />);
+    history.push('/pokemons/25');
+
+    const title = screen.getByRole('heading', { level: 2, name: /Pikachu Details/i });
+    expect(title).toBeInTheDocument();
+
+    const btnFavorite = screen.getByRole('checkbox', { name: /Pokémon favoritado?/i });
+    userEvent.click(btnFavorite);
+    userEvent.click(btnFavorite);
+  });
 });

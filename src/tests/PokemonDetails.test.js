@@ -1,5 +1,6 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import PokemonDetails from '../pages/PokemonDetails';
 import renderWithRouter from '../helper/renderWithRouter';
 import pokemons from '../data';
@@ -49,9 +50,10 @@ describe('testando componente PokemonDetails', () => {
   });
 
   it('Teste se o usuário pode favoritar um pokémon', () => {
+    const test = jest.fn().mockReturnValue(null);
     renderWithRouter(<PokemonDetails
-      isPokemonFavoriteById={ { 25: true } }
-      onUpdateFavoritePokemons={ () => {} }
+      isPokemonFavoriteById={ { 25: false } }
+      onUpdateFavoritePokemons={ test }
       pokemons={ pokemons }
       match={ { params: { id: '25' } } }
     />);
@@ -60,5 +62,9 @@ describe('testando componente PokemonDetails', () => {
     const checkBoxLabel = screen.getByLabelText('Pokémon favoritado?');
     expect(checkBox).toBeInTheDocument();
     expect(checkBoxLabel).toBeInTheDocument();
+
+    userEvent.click(checkBoxLabel);
+    expect(test).toHaveBeenCalled();
+    expect(test).toHaveBeenCalledTimes(1);
   });
 });
